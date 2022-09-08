@@ -1,0 +1,35 @@
+{% extends "first_blog/base_template.html" %}   <!--Extends the content from base_template.html -->
+{% load crispy_forms_tags %}    <!-- Load crispy forms for all forms-->
+
+{% block content %}
+
+    <div class="content-section">
+
+        <form method="post">
+            {% csrf_token %}        <!-- Adding token prevent page from attack-->
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Login.</legend>
+
+
+                <!-- Create a form using crispy form-->
+                {{ form|crispy }}
+            </fieldset>
+
+
+            <!-- Create a submit buttom with login text-->
+            <div class="form-group">
+                <button class="btn-outline-info" type="submit"> Login </button>
+
+            </div>
+
+        </form>
+
+
+        <!-- If users do not have an account direct users to register page. -->
+        <div class="border-top pt-3">
+            <small
+                    class="text-muted">Need an account?<a class="ml-2" href="{% url 'register' %}">Sign up now</a>
+            </small>
+        </div>
+    </div>
+{% endblock content %}

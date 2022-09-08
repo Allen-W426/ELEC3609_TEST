@@ -1,0 +1,29 @@
+{% extends "first_blog/base_template.html" %}   <!--Extends the content from base_template.html -->
+{% load crispy_forms_tags %}    <!-- Load crispy forms for all forms-->
+
+{% block content %}
+
+    <div class="content-section">
+
+        <form method="post">
+            {% csrf_token %}        <!-- Adding token prevent page from attack-->
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Create new blog post</legend>
+
+
+                <!-- Create a form using crispy form-->
+                {{ form|crispy }}
+            </fieldset>
+
+
+            <!-- Create a post now button for posting new post-->
+            <div class="form-group">
+                <button class="btn-outline-info" type="submit"> Post now </button>
+
+            </div>
+
+        </form>
+
+
+    </div>
+{% endblock content %}

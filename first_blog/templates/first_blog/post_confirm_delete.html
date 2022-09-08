@@ -1,0 +1,25 @@
+{% extends "first_blog/base_template.html" %}   <!--Extends the content from base_template.html -->
+{% block content %}
+
+    <div class="content-section">
+
+        <form method="post">
+            {% csrf_token %}        <!-- Adding token prevent page from attack-->
+            <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Delete form</legend>
+                    <h2> Are you sure to delete this post "{{object.title}}"</h2>
+            </fieldset>
+
+
+            <!-- Create two buttons. One for delete post, one for cancel deletion to restore-->
+            <div class="form-group">
+                <button class="btn btn-outline-danger" type="submit"> Delete the post </button>
+                <a class="btn btn-outline-secondary" href = "{% url 'post_detail' object.id %}">Cancel delete post </a>
+
+            </div>
+
+        </form>
+
+
+    </div>
+{% endblock content %}

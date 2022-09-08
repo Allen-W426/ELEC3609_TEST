@@ -1,0 +1,13 @@
+{% extends "first_blog/base_template.html" %}   <!--Extends the content from base_template.html -->
+{% block content %}
+
+    <h2>You have been logout.</h2>
+
+    <!-- If users have been logout, provide a link for re-login. -->
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            <a href ="{% url 'login' %}">Log in again</a>
+        </small>
+    </div>
+
+{% endblock content %}

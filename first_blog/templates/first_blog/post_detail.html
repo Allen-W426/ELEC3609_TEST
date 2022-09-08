@@ -1,0 +1,32 @@
+{% extends "first_blog/base_template.html" %}  <!--Extends the content from base_template.html -->
+{% block content %}
+
+
+    <article class="media content-section">
+    <!-- Import a round circle article picture from the url that
+    posted by the author in their profile-->
+    <img class ="rounded-circle article-img", src = "{{object.author.profile.image.url}}">
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2" href="{%url 'user_posts' object.author.username%}">{{ object.author }}</a>
+          <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
+
+           <!-- User should be able to have a button to update post page and delete post page-->
+          {% if object.author == user %}
+            <div>
+                <a class = "btn btn-secondary btn-sm mt-1 mb-1"
+                    href = "{%url 'post_update' object.id%}">Update Post</a>
+                <a class = "btn btn-danger btn-sm mt-1 mb-1"
+                    href = "{%url 'post_delete' object.id%}">Delete Post</a>
+            </div>
+          {% endif %}
+
+          <!-- Format date in html -->
+        </div>
+        <h2 class = "article-title">{{ object.title }}</h2>
+        <p class="article-content">{{ object.content }}</p>
+      </div>
+    </article>
+
+
+{% endblock content %}

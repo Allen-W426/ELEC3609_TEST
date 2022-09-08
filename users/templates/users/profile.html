@@ -1,0 +1,38 @@
+{% extends "first_blog/base_template.html" %}   <!--Extends the content from base_template.html -->
+{% load crispy_forms_tags %}    <!-- Import crispy form to formatting the form-->
+{% block content %}
+
+    <div class="content-section">
+      <div class="media">
+        <img class="rounded-circle account-img" src="{{user.profile.image.url}}">
+        <div class="media-body">
+          <h2 class="account-heading">{{user.username}}</h2>
+          <p class="text-secondary">{{user.email}}</p>
+        </div>
+      </div>
+
+      <!-- FORM HERE -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}        <!-- Adding token prevent page from attack-->
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Profile Info</legend>
+
+
+                <!-- Create two crispy forms for user to fill out the user
+                update form and profile update form-->
+                {{ u_form|crispy }}
+                {{ p_form|crispy }}
+            </fieldset>
+
+
+            <!-- Create a submit button with update profile text-->
+            <div class="form-group">
+                <button class="btn-outline-info" type="submit"> Update Profile </button>
+
+            </div>
+
+        </form>
+
+
+    </div>
+{% endblock content %}
