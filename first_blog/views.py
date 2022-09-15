@@ -47,9 +47,13 @@ class UserPostListView(ListView):
         return Post.objects.filter(author=user).order_by('-date_posted')
 
 
+
+
 # Create a class inherent from detail view
-class PostDetailView(DetailView):
+class PostDetailView(DetailView,CreateView):
     model = Post
+
+
 
 
 # Create a class inherent from create view
