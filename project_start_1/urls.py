@@ -26,6 +26,9 @@ urlpatterns = [
     # Create an url for home page
     path('', include('first_blog.urls')),
 
+    # Create an url for all paths in chat
+    path('', include('chat.urls')),
+
     # Create an url for user registration
     path('register/', user_views.register, name='register'),
 
@@ -50,7 +53,6 @@ urlpatterns = [
          name='password_reset_done'),
     ###
 ]
-
 
 # If your MEDIA_URL is defined as /media/,
 # you can do this by adding the following snippet to your urls.py:

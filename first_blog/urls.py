@@ -1,18 +1,18 @@
 from django.urls import path
 from . import views
 from .views import (PostListView,
-                    PostDetailView,
                     PostCreateView,
                     PostUpdateView,
                     PostDeleteView,
-                    UserPostListView)
+                    UserPostListView,
+                    DetailPost)
 
 urlpatterns = [
     path('', PostListView.as_view(), name='blog_home'),
     path('about/', views.about, name='blog_about'),
 
     # Create post html pages for detail posts, which paths are specified by their post primary keys
-    path('post/<int:pk>/', PostDetailView.as_view(), name='post_detail'),
+    path('post/<int:pk>/', DetailPost.as_view(), name='post_detail'),
 
     # Create html page for a post creation form
     path('post/new/', PostCreateView.as_view(), name='post_create'),

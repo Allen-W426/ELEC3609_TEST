@@ -1,10 +1,13 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views import View
+from django.urls import reverse
 from .models import Post  # From the models.py import Post table
+from chat.models import ChatRoom
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (ListView,
-                                  DetailView,
                                   CreateView,
                                   UpdateView,
                                   DeleteView)  # Import list view for class based view
@@ -47,13 +50,19 @@ class UserPostListView(ListView):
         return Post.objects.filter(author=user).order_by('-date_posted')
 
 
+class DetailPost(View):
 
+    def get(self, request, pk):
+        context = {"object": Post.objects.get(id=pk)}
+        # add the dictionary during initialization
 
-# Create a class inherent from detail view
-class PostDetailView(DetailView,CreateView):
-    model = Post
+        return render(request, "first_blog/post_detail.html", context)
 
+    def post(self, request, pk):
+        new_chat_room = ChatRoom.objects.create(buyer=self.request.user, seller_invited=Post.objects.get(id=pk).author)
+        new_chat_room.save()
 
+        return HttpResponseRedirect(reverse('chatroom_detail', kwargs={'pk': new_chat_room.pk}))
 
 
 # Create a class inherent from create view

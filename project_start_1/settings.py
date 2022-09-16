@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'first_blog.apps.FirstBlogConfig',  # Add methods in app.py to settings once created a new app
     'users.apps.UsersConfig',  # Add methods in user app to setting
+    'chat.apps.ChatConfig',
     'crispy_forms',  # Integrate crispy form to project
     'django.contrib.admin',
     'django.contrib.auth',

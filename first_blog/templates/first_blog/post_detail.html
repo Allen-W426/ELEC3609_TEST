@@ -22,10 +22,30 @@
           {% endif %}
 
           <!-- Format date in html -->
+
+          <!-- Format date in html -->
         </div>
         <h2 class = "article-title">{{ object.title }}</h2>
         <p class="article-content">{{ object.content }}</p>
-      </div>
+
+        {% if object.author != user %}
+
+            <div class="content-section">
+
+                <form method="post">
+                    {% csrf_token %}        <!-- Adding token prevent page from attack-->
+
+                    <!-- Create a post now button for posting new post-->
+                    <div class="form-group">
+                        <button class="btn-outline-info" type="submit"> Chat with seller now </button>
+
+                </div>
+
+                </form>
+
+
+            </div>
+        {% endif %}
     </article>
 
 
