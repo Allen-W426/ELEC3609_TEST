@@ -5,9 +5,11 @@ from .views import (PostListView,
                     PostUpdateView,
                     PostDeleteView,
                     UserPostListView,
-                    DetailPost)
+                    DetailPost,
+                    BaseTemplateListView)
 
 urlpatterns = [
+    path('base/',BaseTemplateListView.as_view, name = 'base_tempalte'),
     path('', PostListView.as_view(), name='blog_home'),
     path('about/', views.about, name='blog_about'),
 

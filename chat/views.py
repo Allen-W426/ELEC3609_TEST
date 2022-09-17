@@ -26,13 +26,13 @@ class SelfChatListView(ListView):
     paginate_by = 5  # Paginate the chat to be 5, users will only view top 5 chats
 
     def get_queryset(self):
-        user = get_object_or_404(User, username=self.request.user.username)
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
         query_set = ChatRoom.objects.filter(Q(buyer=user) | Q(seller_invited=user))
         return query_set
 
     def get_context_data(self, **kwargs):
         context = super(SelfChatListView, self).get_context_data(**kwargs)
-        context['user'] = User.objects.filter(username=self.request.user.username)
+        context['user'] = get_object_or_404(User, username=self.kwargs.get('username'))
         # Add any other variables to the context here
         user = get_object_or_404(User, username=self.request.user.username)
         context['user_chats'] = ChatRoom.objects.filter(Q(buyer=user) | Q(seller_invited=user))

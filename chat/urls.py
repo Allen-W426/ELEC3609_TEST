@@ -7,5 +7,5 @@ from .views import (ChatDetailView,
 urlpatterns = [
     path('chat/<int:pk>/', ChatDetailView.as_view(), name='chatroom_detail'),
 
-    path('chat/all_chats/', login_required(SelfChatListView.as_view()), name='user_chat'),
+    path('chat/<str:username>/', login_required(SelfChatListView.as_view()), name='user_chat'),
 ]

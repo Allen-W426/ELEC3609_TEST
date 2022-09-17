@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import View
@@ -108,3 +109,16 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == post.author:
             return True
         return False
+
+
+class BaseTemplateListView(ListView):
+    model = ChatRoom
+    template_name = "first_blog/base_template.html"  # <app>/<model>_<view_type>.html
+
+    def get_context_data(self, **kwargs):
+        context = super(BaseTemplateListView, self).get_context_data(**kwargs)
+        context['user'] = get_object_or_404(User, username=self.kwargs.get('username'))
+        # Add any other variables to the context here
+        user = get_object_or_404(User, username=self.request.user.username)
+        context['user_chats'] = ChatRoom.objects.filter(Q(buyer=user) | Q(seller_invited=user))
+        return context

@@ -1,12 +1,12 @@
 {% extends "first_blog/base_template.html" %}  <!--Extends the content from base_template.html -->
 {% block content %}
 
-    {% for user in user%}
+
         <img class ="rounded-circle article-img",
             src = "{{user.profile.image.url}}">
         <h3 style="display:inline-block" >Chatrooms For:
             <h4 style="display:inline-block; color:green; margin:10px">{{user.username}}</h4></h3>
-    {% endfor %}
+
 
 
 
