@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (ListView,
                                   CreateView,
                                   UpdateView,
-                                  DeleteView)  # Import list view for class based view
+                                  DeleteView, DetailView)  # Import list view for class based view
 
 
 # Create your views here.
@@ -111,14 +111,3 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return False
 
 
-class BaseTemplateListView(ListView):
-    model = ChatRoom
-    template_name = "first_blog/base_template.html"  # <app>/<model>_<view_type>.html
-
-    def get_context_data(self, **kwargs):
-        context = super(BaseTemplateListView, self).get_context_data(**kwargs)
-        context['user'] = get_object_or_404(User, username=self.kwargs.get('username'))
-        # Add any other variables to the context here
-        user = get_object_or_404(User, username=self.request.user.username)
-        context['user_chats'] = ChatRoom.objects.filter(Q(buyer=user) | Q(seller_invited=user))
-        return context
