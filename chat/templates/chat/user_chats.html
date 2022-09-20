@@ -11,12 +11,13 @@
 
 
     {% for chat in user_chats %}
-        {% if chat.buyer == self.request.user %}
+        {% if chat.buyer == user %}
             <article class="media content-section">
             <img class ="rounded-circle article-img", src = "{{chat.seller_invited.profile.image.url}}">
               <div class="media-body">
                 <div class="article-metadata">
-                  <h5 style="color:darkblue;">{{chat.seller_invited}}</h5>
+                  <h5 style="color:darkblue;">Chat to: {{chat.seller_invited}}
+                    <h6 style="color:black">Chatroom num: {{chat.id}}</h6></h5>
                   <a class="mr-2" href = "{%url 'chatroom_detail' chat.id  %}" >
                     <button class="btn-outline-info" >Chat now</button></a>
                 </div>
@@ -31,7 +32,8 @@
             <img class ="rounded-circle article-img", src = "{{chat.buyer.profile.image.url}}">
               <div class="media-body">
                 <div class="article-metadata">
-                  <h5 style="color:darkblue;">{{chat.buyer}}</h5>
+                  <h5 style="color:darkblue;">Chat to: {{chat.buyer}}
+                    <h6 style="color:black">Chatroom num: {{chat.id}}</h6></h5>
                   <a class="mr-2" href = "{%url 'chatroom_detail' chat.id  %}" >
                     <button class="btn-outline-info" >Chat now</button></a>
                   <!-- Format date in html -->

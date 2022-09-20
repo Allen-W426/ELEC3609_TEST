@@ -1,1 +1,182 @@
-<h1>Arrived.</h1>
+{% load static %} <!-- Load static folder into base_template -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Import css file into base_template from static folder-->
+    <link rel="stylesheet" type="text/css" href="{% static 'first_blog/main.css' %}">
+
+    <!-- Import basic javascript to project base template -->
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+
+
+</head>
+
+
+<script type="text/javascript">
+    $(document).on('submit','#message-creation-form',function(e){
+    e.preventDefault();
+
+    $.ajax({
+      type:'POST',
+      url:'msg_creation/',
+      data:{
+          user:$('#user').val(),
+          chatroomID:$('#chatroomID').val(),
+          msg_content:$('#msg_content').val(),
+          csrfmiddlewaretoken: "{{csrf_token}}",
+      },
+      success: function(data){
+         alert("obj creating")
+      }
+    });
+    document.getElementById('msg_content').value = ''
+  });
+</script>
+
+<script>
+    $(document).ready(function(){
+
+    setInterval(function(){
+        $.ajax({
+            type: 'GET',
+            url : "/getMessages/{{current_room.id}}/",
+            success: function(response){
+                console.log(response);
+                $("#display").empty();
+                for (var key in messages)
+                {
+                    var temp=response.messages[key].msg_writer.username+
+                        "</b><p>"+response.messages[key].msg_content+
+                        response.messages[key].msg_posted+"</span></div>";
+                    $("#display").append(temp);
+                }
+            },
+            error: function(response){
+                alert('An error occurred')
+            }
+        });
+    },200);
+    })
+</script>
+
+
+<body>
+
+    <!-- Create a navigation bar using bootstrap template -->
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+          <a class="navbar-brand mr-4" href="/">Django Blog</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarToggle">
+
+
+            <div class="navbar-nav mr-auto">
+              <!-- reference hyperlink to blog home by it's name created inside urls.py-->
+              <a class="nav-item nav-link" href="{% url 'blog_home' %}">Home</a>
+              <a class="nav-item nav-link" href="{% url 'blog_about'%}">About</a>
+            </div>
+
+
+
+
+            <!-- Navbar Right Side -->
+            <div class="navbar-nav">
+                <!-- If user has been logged in-->
+                {% if user.is_authenticated %}
+                    <!-- Create links for log out page or access to personal profile-->
+                    <a class="nav-item nav-link" href="{% url 'post_create' %}">Create Post</a>
+                    <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                    <a class="nav-item nav-link" href="{% url 'logout' %}">Log out</a>
+
+
+
+                <!-- If user has not been logged in-->
+                {% else %}
+                    <!-- create links to login and register-->
+                    <a class="nav-item nav-link" href="{% url 'login'%}">Login</a>
+                    <a class="nav-item nav-link" href="{% url 'register'%}">Register</a>
+                {% endif %}
+            </div>
+
+
+
+          </div>
+
+        </div>
+      </nav>
+    </header>
+
+
+
+
+    {% if current_room.buyer == request.user %}
+        <h2>Chat With: {{current_room.seller_invited}}</h2>
+    {% else %}
+        <h2>Chat With: {{current_room.buyer}}</h2>
+    {% endif %}
+
+
+
+
+
+    <div id="display">
+    </div>
+
+
+    <div class="container">
+
+    <style>
+
+        input[type=text], select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        }
+
+        input[type=submit] {
+        width: 15%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+        background-color: #45a049;
+        }
+
+    </style>
+
+        <form id="message-creation-form">
+            {% csrf_token %}
+            <input type="hidden" name="user" id="user" value="{{user}}"/>
+            <input type="hidden" name="chatroomID" id="chatroomID" value="{{current_room.id}}"/>
+            <input type="text" name="msg_content" id="msg_content" width="100px" />
+            <input type="submit" value="Send">
+        </form>
+    </div>
+
+
+</body>
+
+
+</html>

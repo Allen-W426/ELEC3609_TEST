@@ -1,5 +1,5 @@
+from datetime import datetime
 from django.db import models
-from django.utils import timezone
 from django.contrib.auth.models import User  # Import user table to model
 from django.urls import reverse
 
@@ -18,6 +18,9 @@ class ChatRoom(models.Model):
 
 class Message(models.Model):
     chatRoomID = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
-    msg_writer = models.ForeignKey(User, on_delete=models.CASCADE)
+    msg_writer = models.ForeignKey(User, related_name="writer", on_delete=models.CASCADE)
     msg_content = models.TextField()
-    msg_posted = models.DateTimeField(default=timezone.now)
+    msg_posted = models.DateTimeField(default=datetime.now, blank=True)
+
+    class Meta:
+        ordering = ("msg_posted",)

@@ -1,13 +1,9 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
-from django.http import HttpResponse
-from requests import request
+from django.http.response import JsonResponse, HttpResponse
 
-from users.models import Profile
-from .models import ChatRoom
+from .models import ChatRoom, Message
 from django.contrib.auth.models import User
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (ListView,
                                   DetailView,
                                   CreateView,
@@ -15,8 +11,30 @@ from django.views.generic import (ListView,
                                   DeleteView)  # Import list view for class based view
 
 
-class ChatDetailView(DetailView):
-    model = ChatRoom
+def ChatDetailView(request, pk):
+    user = request.user
+    current_room = ChatRoom.objects.get(id=pk)
+    return render(request, 'chat/chatroom_detail.html', {
+        'user': user,
+        'current_room': current_room,
+    })
+
+
+def CreateMsgInstance(request):
+    msg_content = request.POST['msg_content']
+    user = request.POST['user']
+    chatroomID = request.POST['chatroomID']
+
+    new_message = Message.objects.create(msg_content=msg_content, msg_writer=user, chatRoomID=chatroomID)
+    new_message.save()
+    return HttpResponse('Message sent successfully')
+
+
+def GetCurrentRoomMsgs(request, pk):
+    cur_room = ChatRoom.objects.get(id=pk)
+
+    messages = Message.objects.filter(chatRoomID=cur_room.id)
+    return JsonResponse({"messages": list(messages.values())})
 
 
 class SelfChatListView(ListView):
