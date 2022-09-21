@@ -21,19 +21,20 @@ def ChatDetailView(request, pk):
 
 
 def CreateMsgInstance(request):
+    chatroomID = request.POST['chatroomID']
     msg_content = request.POST['msg_content']
     user = request.POST['user']
-    chatroomID = request.POST['chatroomID']
 
-    new_message = Message.objects.create(msg_content=msg_content, msg_writer=user, chatRoomID=chatroomID)
+    new_message = Message.objects.create(msg_content=msg_content, msg_writer=user,
+                                         chatRoomID=chatroomID)
     new_message.save()
     return HttpResponse('Message sent successfully')
 
 
 def GetCurrentRoomMsgs(request, pk):
     cur_room = ChatRoom.objects.get(id=pk)
-
     messages = Message.objects.filter(chatRoomID=cur_room.id)
+
     return JsonResponse({"messages": list(messages.values())})
 
 

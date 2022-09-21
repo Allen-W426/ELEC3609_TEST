@@ -20,52 +20,8 @@
 </head>
 
 
-<script type="text/javascript">
-    $(document).on('submit','#message-creation-form',function(e){
-    e.preventDefault();
 
-    $.ajax({
-      type:'POST',
-      url:'msg_creation/',
-      data:{
-          user:$('#user').val(),
-          chatroomID:$('#chatroomID').val(),
-          msg_content:$('#msg_content').val(),
-          csrfmiddlewaretoken: "{{csrf_token}}",
-      },
-      success: function(data){
-         alert("obj creating")
-      }
-    });
-    document.getElementById('msg_content').value = ''
-  });
-</script>
 
-<script>
-    $(document).ready(function(){
-
-    setInterval(function(){
-        $.ajax({
-            type: 'GET',
-            url : "/getMessages/{{current_room.id}}/",
-            success: function(response){
-                console.log(response);
-                $("#display").empty();
-                for (var key in messages)
-                {
-                    var temp=response.messages[key].msg_writer.username+
-                        "</b><p>"+response.messages[key].msg_content+
-                        response.messages[key].msg_posted+"</span></div>";
-                    $("#display").append(temp);
-                }
-            },
-            error: function(response){
-                alert('An error occurred')
-            }
-        });
-    },200);
-    })
-</script>
 
 
 <body>
@@ -135,6 +91,33 @@
     </div>
 
 
+    <script>
+        $(document).ready(function(){
+
+        setInterval(function(){
+            $.ajax({
+                type: 'GET',
+                url : "{% url 'get_msgs' current_room.id %}",
+                success: function(response){
+                    console.log(response);
+                    $("#display").empty();
+                    for (var key in response.messages)
+                    {
+
+                        var temp= response.messages[key].msg_writer +"<br></b><p>"
+                        +response.messages[key].msg_content+"<br>"+response.messages[key].msg_posted
+                        +"</span></div>";
+                        $("#display").append(temp);
+                    }
+                },
+                error: function(response){
+                    alert('An error occurred')
+                }
+            });
+        },200);
+        })
+    </script>
+
     <div class="container">
 
     <style>
@@ -170,10 +153,32 @@
             {% csrf_token %}
             <input type="hidden" name="user" id="user" value="{{user}}"/>
             <input type="hidden" name="chatroomID" id="chatroomID" value="{{current_room.id}}"/>
-            <input type="text" name="msg_content" id="msg_content" width="100px" />
+            <input type="text" name="msg_content" id="msg_content" width="100px"/>
             <input type="submit" value="Send">
         </form>
     </div>
+
+
+    <script type="text/javascript">
+        $(document).on('submit','#message-creation-form',function(e){
+        e.preventDefault();
+
+        $.ajax({
+          type:'POST',
+          url:"{% url 'msg_create' %}",
+          data:{
+              user:$('#user').val(),
+              chatroomID:$('#chatroomID').val(),
+              msg_content:$('#msg_content').val(),
+              csrfmiddlewaretoken: "{{csrf_token}}",
+          },
+          success: function(data){
+             alert("obj creating")
+          }
+        });
+        document.getElementById('msg_content').value = ''
+      });
+    </script>
 
 
 </body>
