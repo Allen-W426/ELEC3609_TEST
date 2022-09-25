@@ -24,7 +24,7 @@ def CreateMsgInstance(request):
     chatroomID = request.POST['chatroomID']
     msg_content = request.POST['msg_content']
     user = request.POST['user']
-    chatroom = ChatRoom.objects.filter(id=chatroomID)
+    chatroom = ChatRoom.objects.filter(id=chatroomID)[0]
 
     new_message = Message.objects.create(msg_content=msg_content, msg_writer=request.user,
                                          chatRoomID=chatroom)
