@@ -103,11 +103,24 @@
                     $("#display").empty();
                     for (var key in response.messages)
                     {
+                        var buyer = "{{ current_room.buyer.id }}"
+                        var buyer_username = "{{ current_room.buyer.username }}"
+                        var seller = "{{ current_room.seller_invited.id }}"
+                        var seller_username = "{{ current_room.seller_invited.username }}"
 
-                        var temp= response.messages[key].msg_writer +"<br></b><p>"
-                        +response.messages[key].msg_content+"<br>"+response.messages[key].msg_posted
-                        +"</span></div>";
-                        $("#display").append(temp);
+                        if (response.messages[key].msg_writer_id == buyer){
+
+                            var temp= buyer_username +"<br></b><p>"
+                            +response.messages[key].msg_content+"<br>"+response.messages[key].msg_posted
+                            +"</span></div>";
+                            $("#display").append(temp);
+                        }else if (response.messages[key].msg_writer_id == seller){
+
+                            var temp = seller_username + "<br></b><p>"
+                                + response.messages[key].msg_content + "<br>" + response.messages[key].msg_posted
+                                + "</span></div>";
+                            $("#display").append(temp);
+                        }
                     }
                 },
                 error: function(response){
